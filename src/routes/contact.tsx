@@ -82,6 +82,21 @@ function ContactPage() {
           </a>
         </div>
 
+        <div className="mt-4 rounded-2xl border border-border bg-secondary/60 p-6 shadow-card">
+          <h2 className="font-semibold">💙 Join our Remind</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Get event reminders straight to your phone.
+          </p>
+          <a
+            href="https://www.remind.com/join/creekyab"
+            target="_blank"
+            rel="noreferrer"
+            className="mt-3 inline-block text-sm font-semibold text-primary underline underline-offset-4"
+          >
+            remind.com/join/creekyab
+          </a>
+        </div>
+
         <div className="mt-10 rounded-2xl bg-gradient-warm p-8 text-coral-foreground">
           <h2 className="text-2xl font-bold">Anonymous feedback form</h2>
           <p className="mt-2 max-w-xl">
