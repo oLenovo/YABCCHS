@@ -43,7 +43,7 @@ export function SiteHeader({ search, onSearchChange }: Props) {
             <Link
               key={l.label}
               to={l.to}
-              hash={"hash" in l ? l.hash : undefined}
+              {...("hash" in l ? { hash: l.hash } : {})}
               className="rounded-full px-3 py-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
               activeOptions={{ exact: true }}
               activeProps={{ className: "text-foreground" }}
