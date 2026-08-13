@@ -65,16 +65,16 @@ function Index() {
       <SiteHeader search={search} onSearchChange={setSearch} />
 
       <main>
-        <section className="bg-gradient-hero text-primary-foreground">
+        <section className="bg-gradient-hero text-foreground">
           <div className="mx-auto max-w-6xl px-4 py-20 sm:py-28">
-            <span className="inline-flex items-center gap-2 rounded-full bg-primary-foreground/15 px-4 py-1.5 text-sm font-medium">
+            <span className="inline-flex items-center gap-2 rounded-full bg-card/70 px-4 py-1.5 text-sm font-medium">
               <PartyPopper className="size-4" />
               Student-led · All grades welcome
             </span>
             <h1 className="mt-6 max-w-3xl text-4xl font-bold leading-tight sm:text-6xl">
               Your school year, planned by students like you.
             </h1>
-            <p className="mt-5 max-w-2xl text-lg text-primary-foreground/85">
+            <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
               Find fests, workshops, board meetings and volunteer slots — then grab your spot in
               under a minute.
             </p>
@@ -95,10 +95,10 @@ function Index() {
               </Button>
             </div>
 
-            <div className="mt-12 flex flex-wrap items-center gap-4 rounded-2xl border border-primary-foreground/20 bg-primary-foreground/10 p-5 backdrop-blur-sm">
+            <div className="mt-12 flex flex-wrap items-center gap-4 rounded-2xl border border-card/60 bg-card/60 p-5 backdrop-blur-sm">
               <CalendarDays className="size-6" />
               <div className="flex-1">
-                <p className="text-sm uppercase tracking-widest text-primary-foreground/70">
+                <p className="text-sm uppercase tracking-widest text-muted-foreground">
                   Next major event
                 </p>
                 <p className="text-lg font-semibold">

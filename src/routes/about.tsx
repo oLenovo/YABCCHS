@@ -65,9 +65,9 @@ function AboutPage() {
           ))}
         </div>
 
-        <div className="mt-14 rounded-2xl bg-gradient-hero p-8 text-primary-foreground">
+        <div className="mt-14 rounded-2xl bg-gradient-hero p-8 text-foreground">
           <h2 className="text-2xl font-bold">How to join</h2>
-          <p className="mt-2 max-w-2xl text-primary-foreground/85">
+          <p className="mt-2 max-w-2xl text-muted-foreground">
             Come to any board meeting, sign up for a volunteer slot on the events page, or tell a
             committee lead which group you'd like to help with. Members from all grades welcome.
           </p>
