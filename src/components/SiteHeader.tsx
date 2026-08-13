@@ -22,7 +22,7 @@ export function SiteHeader({ search, onSearchChange }: Props) {
             <Sparkles className="size-5" />
           </span>
           <span className="font-display text-lg font-bold tracking-tight">
-            Youth Advisory Board
+            CCHS Youth Advisory Board
           </span>
         </Link>
 

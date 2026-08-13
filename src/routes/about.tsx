@@ -5,7 +5,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About Us — Youth Advisory Board" },
+      { title: "About Us — CCHS Youth Advisory Board" },
       {
         name: "description",
         content:
@@ -47,12 +47,13 @@ function AboutPage() {
       <main className="mx-auto max-w-4xl px-4 py-16">
         <p className="text-sm font-semibold uppercase tracking-widest text-accent">About us</p>
         <h1 className="mt-3 text-4xl font-bold sm:text-5xl">
-          Students shaping what happens at our school
+          We’re the students behind the good stuff at Creek
         </h1>
         <p className="mt-5 text-lg leading-relaxed text-muted-foreground">
-          The Youth Advisory Board is a group of students from every grade who plan events, bring
-          student voice to school leadership, and create ways for everyone to get involved. We meet
-          monthly, and every meeting is open — no application required to show up.
+          CCHS Youth Advisory Board is a group of students from every grade promoting positivity and
+          wellness at Creek. We plan events, bring student voice to school leadership, and make it
+          easy for anyone to get involved. We meet after school on Mondays in IC 715 — every
+          meeting is open, no application needed.
         </p>
 
         <h2 className="mt-14 text-2xl font-bold">Our committees</h2>
@@ -65,11 +66,11 @@ function AboutPage() {
           ))}
         </div>
 
-        <div className="mt-14 rounded-2xl bg-gradient-hero p-8 text-primary-foreground">
+        <div className="mt-14 rounded-2xl bg-gradient-hero p-8 text-foreground">
           <h2 className="text-2xl font-bold">How to join</h2>
-          <p className="mt-2 max-w-2xl text-primary-foreground/85">
-            Come to any board meeting, sign up for a volunteer slot on the events page, or tell a
-            committee lead which group you'd like to help with. Members from all grades welcome.
+          <p className="mt-2 max-w-2xl text-muted-foreground">
+            Drop by any Monday meeting in IC 715, sign up for a volunteer slot on the events page, or
+            join our Remind to get updates. All grades welcome, always.
           </p>
         </div>
       </main>

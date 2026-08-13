@@ -65,18 +65,18 @@ function Index() {
       <SiteHeader search={search} onSearchChange={setSearch} />
 
       <main>
-        <section className="bg-gradient-hero text-primary-foreground">
+        <section className="bg-gradient-hero text-foreground">
           <div className="mx-auto max-w-6xl px-4 py-20 sm:py-28">
-            <span className="inline-flex items-center gap-2 rounded-full bg-primary-foreground/15 px-4 py-1.5 text-sm font-medium">
+            <span className="inline-flex items-center gap-2 rounded-full bg-card/70 px-4 py-1.5 text-sm font-medium">
               <PartyPopper className="size-4" />
-              Student-led · All grades welcome
+              Promoting positivity & wellness at Creek 🍒
             </span>
             <h1 className="mt-6 max-w-3xl text-4xl font-bold leading-tight sm:text-6xl">
-              Your school year, planned by students like you.
+              Good vibes, big events, all made by Creek students.
             </h1>
-            <p className="mt-5 max-w-2xl text-lg text-primary-foreground/85">
-              Find fests, workshops, board meetings and volunteer slots — then grab your spot in
-              under a minute.
+            <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
+              Fests, workshops, volunteer slots and our Monday meetings in IC 715 — find something
+              you love and grab your spot in under a minute.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
@@ -89,16 +89,16 @@ function Index() {
               <Button
                 size="lg"
                 onClick={() => openSignUp(featured)}
-                className="bg-gradient-warm text-coral-foreground hover:opacity-90"
+                className="bg-gradient-warm font-semibold text-sunny-foreground hover:opacity-90"
               >
                 Join a Committee / Sign Up
               </Button>
             </div>
 
-            <div className="mt-12 flex flex-wrap items-center gap-4 rounded-2xl border border-primary-foreground/20 bg-primary-foreground/10 p-5 backdrop-blur-sm">
+            <div className="mt-12 flex flex-wrap items-center gap-4 rounded-2xl border border-card/60 bg-card/60 p-5 backdrop-blur-sm">
               <CalendarDays className="size-6" />
               <div className="flex-1">
-                <p className="text-sm uppercase tracking-widest text-primary-foreground/70">
+                <p className="text-sm uppercase tracking-widest text-muted-foreground">
                   Next major event
                 </p>
                 <p className="text-lg font-semibold">
@@ -115,7 +115,7 @@ function Index() {
         <section id="events" className="mx-auto max-w-6xl scroll-mt-24 px-4 py-16">
           <h2 className="text-3xl font-bold sm:text-4xl">Upcoming events</h2>
           <p className="mt-2 text-muted-foreground">
-            Filter by what you're into, or search from the bar up top.
+            Pick what you're into, or search from the bar up top — everyone's welcome.
           </p>
 
           <div className="mt-6 flex flex-wrap gap-2">

@@ -6,7 +6,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact & Links — Youth Advisory Board" },
+      { title: "Contact & Links — CCHS Youth Advisory Board" },
       {
         name: "description",
         content:
@@ -38,13 +38,13 @@ function ContactPage() {
 
         <div className="mt-10 grid gap-4 sm:grid-cols-2">
           <a
-            href="mailto:yab@student.school.edu"
+            href="mailto:creekyab@student.cherrycreekschools.org"
             className="flex items-start gap-4 rounded-2xl border border-border bg-card p-6 shadow-card transition-all hover:-translate-y-1 hover:shadow-lift"
           >
             <Mail className="size-6 text-accent" />
             <div>
               <h2 className="font-semibold">Email the board</h2>
-              <p className="text-sm text-muted-foreground">yab@student.school.edu</p>
+              <p className="text-sm text-muted-foreground">creekyab@student.cherrycreekschools.org</p>
             </div>
           </a>
           <div className="flex items-start gap-4 rounded-2xl border border-border bg-card p-6 shadow-card">
@@ -52,12 +52,12 @@ function ContactPage() {
             <div>
               <h2 className="font-semibold">Where we meet</h2>
               <p className="text-sm text-muted-foreground">
-                Library Conference Room · First Thursday, 3:30 PM
+                IC 715 · Mondays after school
               </p>
             </div>
           </div>
           <a
-            href="https://instagram.com"
+            href="https://instagram.com/creekyab"
             target="_blank"
             rel="noreferrer"
             className="flex items-start gap-4 rounded-2xl border border-border bg-card p-6 shadow-card transition-all hover:-translate-y-1 hover:shadow-lift"
@@ -65,11 +65,11 @@ function ContactPage() {
             <Instagram className="size-6 text-coral" />
             <div>
               <h2 className="font-semibold">Instagram</h2>
-              <p className="text-sm text-muted-foreground">@youthadvisoryboard</p>
+              <p className="text-sm text-muted-foreground">@creekyab</p>
             </div>
           </a>
           <a
-            href="https://tiktok.com"
+            href="https://tiktok.com/@creekyab"
             target="_blank"
             rel="noreferrer"
             className="flex items-start gap-4 rounded-2xl border border-border bg-card p-6 shadow-card transition-all hover:-translate-y-1 hover:shadow-lift"
@@ -77,8 +77,23 @@ function ContactPage() {
             <Music2 className="size-6 text-coral" />
             <div>
               <h2 className="font-semibold">TikTok</h2>
-              <p className="text-sm text-muted-foreground">@youthadvisoryboard</p>
+              <p className="text-sm text-muted-foreground">@creekyab</p>
             </div>
+          </a>
+        </div>
+
+        <div className="mt-4 rounded-2xl border border-border bg-secondary/60 p-6 shadow-card">
+          <h2 className="font-semibold">💙 Join our Remind</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Get event reminders straight to your phone.
+          </p>
+          <a
+            href="https://www.remind.com/join/creekyab"
+            target="_blank"
+            rel="noreferrer"
+            className="mt-3 inline-block text-sm font-semibold text-primary underline underline-offset-4"
+          >
+            remind.com/join/creekyab
           </a>
         </div>
 
