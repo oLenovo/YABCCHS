@@ -89,7 +89,7 @@ function Index() {
               <Button
                 size="lg"
                 onClick={() => openSignUp(featured)}
-                className="bg-gradient-warm text-coral-foreground hover:opacity-90"
+                className="bg-gradient-warm font-semibold text-sunny-foreground hover:opacity-90"
               >
                 Join a Committee / Sign Up
               </Button>
