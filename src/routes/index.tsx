@@ -69,14 +69,14 @@ function Index() {
           <div className="mx-auto max-w-6xl px-4 py-20 sm:py-28">
             <span className="inline-flex items-center gap-2 rounded-full bg-card/70 px-4 py-1.5 text-sm font-medium">
               <PartyPopper className="size-4" />
-              Student-led · All grades welcome
+              Promoting positivity & wellness at Creek 🍒
             </span>
             <h1 className="mt-6 max-w-3xl text-4xl font-bold leading-tight sm:text-6xl">
-              Your school year, planned by students like you.
+              Good vibes, big events, all made by Creek students.
             </h1>
             <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
-              Find fests, workshops, board meetings and volunteer slots — then grab your spot in
-              under a minute.
+              Fests, workshops, volunteer slots and our Monday meetings in IC 715 — find something
+              you love and grab your spot in under a minute.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
@@ -115,7 +115,7 @@ function Index() {
         <section id="events" className="mx-auto max-w-6xl scroll-mt-24 px-4 py-16">
           <h2 className="text-3xl font-bold sm:text-4xl">Upcoming events</h2>
           <p className="mt-2 text-muted-foreground">
-            Filter by what you're into, or search from the bar up top.
+            Pick what you're into, or search from the bar up top — everyone's welcome.
           </p>
 
           <div className="mt-6 flex flex-wrap gap-2">

@@ -10,11 +10,11 @@ export function SiteFooter() {
             <span className="flex size-8 items-center justify-center rounded-lg bg-gradient-warm text-coral-foreground">
               <Sparkles className="size-4" />
             </span>
-            <span className="font-display text-base font-bold">Youth Advisory Board</span>
+            <span className="font-display text-base font-bold">CCHS Youth Advisory Board</span>
           </div>
           <p className="mt-3 max-w-xs text-sm text-muted-foreground">
-            Students planning events, service projects and celebrations for our whole school
-            community.
+            Promoting positivity and wellness at Creek 🍒 — student-run events, service projects and
+            good vibes all year.
           </p>
         </div>
 
@@ -38,7 +38,7 @@ export function SiteFooter() {
             </li>
             <li>
               <Link to="/contact" className="transition-colors hover:text-foreground">
-                Service hours help
+                Join our Remind
               </Link>
             </li>
           </ul>
@@ -48,7 +48,7 @@ export function SiteFooter() {
           <h3 className="text-sm font-semibold uppercase tracking-wide">Follow us</h3>
           <div className="mt-3 flex gap-3">
             <a
-              href="https://instagram.com"
+              href="https://instagram.com/creekyab"
               target="_blank"
               rel="noreferrer"
               aria-label="Instagram"
@@ -57,7 +57,7 @@ export function SiteFooter() {
               <Instagram className="size-5" />
             </a>
             <a
-              href="https://tiktok.com"
+              href="https://tiktok.com/@creekyab"
               target="_blank"
               rel="noreferrer"
               aria-label="TikTok"
