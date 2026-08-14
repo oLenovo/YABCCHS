@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowRight, CalendarDays, PartyPopper, Loader2 } from "lucide-react";
+import { ArrowRight, CalendarDays, PartyPopper } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -9,10 +9,45 @@ import { SignUpDialog } from "@/components/SignUpDialog";
 import { supabase } from "@/integrations/supabase/client";
 import {
   CATEGORY_FILTERS,
+  events,
   formatEventDate,
   type EventCategory,
   type YabEvent,
 } from "@/data/events";
+
+function normalizeSupabaseEvent(row: Record<string, unknown>): YabEvent | null {
+  if (!row || typeof row !== "object") return null;
+
+  const title = typeof row.title === "string" ? row.title.trim() : "";
+  const date = typeof row.date === "string" ? row.date : typeof row.event_date === "string" ? row.event_date : "";
+  const categoryValue = typeof row.category === "string" ? row.category : "Meeting";
+  const category: EventCategory =
+    categoryValue === "Culture" ||
+      categoryValue === "Volunteering" ||
+      categoryValue === "Workshop" ||
+      categoryValue === "Meeting"
+      ? categoryValue
+      : "Meeting";
+
+  if (!title && !row.id) return null;
+
+  const roles = Array.isArray(row.roles)
+    ? row.roles.filter((value): value is string => typeof value === "string")
+    : [];
+
+  return {
+    id: String(row.id ?? `${title || "event"}-${date || "new"}`),
+    title: title || "Untitled Event",
+    category,
+    date,
+    start: typeof row.start === "string" ? row.start : "09:00",
+    end: typeof row.end === "string" ? row.end : "10:00",
+    location: typeof row.location === "string" ? row.location : "TBD",
+    description: typeof row.description === "string" ? row.description : "",
+    roles,
+    featured: Boolean(row.featured),
+  };
+}
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -34,49 +69,54 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const [eventsList, setEventsList] = useState<YabEvent[]>([]);
-  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"All" | EventCategory>("All");
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<YabEvent | null>(null);
   const [open, setOpen] = useState(false);
+  const [eventsList, setEventsList] = useState<YabEvent[]>(events);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchSupabaseEvents() {
+    let isMounted = true;
+
+    async function loadEvents() {
       setLoading(true);
+
       try {
         const { data, error } = await supabase
           .from("events")
           .select("*")
-          .order("event_date", { ascending: true });
+          .order("date", { ascending: true, nullsFirst: false });
 
-        if (error) {
-          console.error("Error fetching events from Supabase:", error);
-        } else if (data) {
-          // Safely map values with fallbacks to avoid crashes
-          const formattedEvents: YabEvent[] = data.map((item: any) => ({
-            id: item.id || String(Math.random()),
-            title: item.title || "Untitled Event",
-            description: item.description || "",
-            // Use event_date, or fall back to created_at or today's date if missing
-            date: item.event_date || item.created_at || new Date().toISOString(),
-            category: (item.category as EventCategory) || "General",
-            location: item.location || "TBD",
-            featured: Boolean(item.featured),
-          }));
-          setEventsList(formattedEvents);
+        if (error) throw error;
+
+        const nextEvents = (data ?? [])
+          .map((row) => normalizeSupabaseEvent(row as Record<string, unknown>))
+          .filter((event): event is YabEvent => Boolean(event));
+
+        if (isMounted) {
+          setEventsList(nextEvents.length > 0 ? nextEvents : events);
         }
-      } catch (err) {
-        console.error("Unexpected error fetching events:", err);
+      } catch (error) {
+        console.error("Error fetching events from Supabase:", error);
+        if (isMounted) {
+          setEventsList(events);
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     }
 
-    fetchSupabaseEvents();
+    loadEvents();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  const featured = eventsList.find((e) => e.featured) ?? eventsList[0];
+  const featured = eventsList.find((e) => e.featured) ?? eventsList[0] ?? null;
 
   const visible = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -85,11 +125,11 @@ function Index() {
       .filter(
         (e) =>
           !q ||
-          (e.title && e.title.toLowerCase().includes(q)) ||
-          (e.description && e.description.toLowerCase().includes(q)) ||
-          (e.location && e.location.toLowerCase().includes(q))
+          e.title.toLowerCase().includes(q) ||
+          e.description.toLowerCase().includes(q) ||
+          e.location.toLowerCase().includes(q),
       )
-      .sort((a, b) => (a.date || "").localeCompare(b.date || ""));
+      .sort((a, b) => a.date.localeCompare(b.date));
   }, [eventsList, filter, search]);
 
   function openSignUp(event: YabEvent) {
@@ -165,8 +205,8 @@ function Index() {
                 key={f.value}
                 onClick={() => setFilter(f.value)}
                 className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${filter === f.value
-                    ? "border-transparent bg-primary text-primary-foreground"
-                    : "border-border bg-card text-muted-foreground hover:bg-secondary hover:text-foreground"
+                  ? "border-transparent bg-primary text-primary-foreground"
+                  : "border-border bg-card text-muted-foreground hover:bg-secondary hover:text-foreground"
                   }`}
               >
                 {f.label}
@@ -175,13 +215,12 @@ function Index() {
           </div>
 
           {loading ? (
-            <div className="mt-12 flex items-center justify-center gap-2 p-12 text-muted-foreground">
-              <Loader2 className="size-5 animate-spin" />
-              <span>Loading events from database...</span>
-            </div>
+            <p className="mt-12 rounded-2xl border border-dashed border-border p-12 text-center text-muted-foreground">
+              Loading events...
+            </p>
           ) : visible.length === 0 ? (
             <p className="mt-12 rounded-2xl border border-dashed border-border p-12 text-center text-muted-foreground">
-              No events match that search yet — try another filter or add events in Supabase!
+              No events match that search yet — try another filter.
             </p>
           ) : (
             <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
