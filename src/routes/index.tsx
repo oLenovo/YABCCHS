@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { ArrowRight, CalendarDays, PartyPopper } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -6,7 +6,6 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { EventCard } from "@/components/EventCard";
 import { SignUpDialog } from "@/components/SignUpDialog";
-import { supabase } from "@/integrations/supabase/client";
 import {
   CATEGORY_FILTERS,
   events,
@@ -14,45 +13,6 @@ import {
   type EventCategory,
   type YabEvent,
 } from "@/data/events";
-
-function normalizeSupabaseEvent(row: Record<string, unknown>): YabEvent | null {
-  if (!row || typeof row !== "object") return null;
-
-  const title = typeof row.title === "string" ? row.title.trim() : "";
-  const date =
-    typeof row.date === "string"
-      ? row.date
-      : typeof row.event_date === "string"
-        ? row.event_date
-        : "";
-  const categoryValue = typeof row.category === "string" ? row.category : "Meeting";
-  const category: EventCategory =
-    categoryValue === "Culture" ||
-      categoryValue === "Volunteering" ||
-      categoryValue === "Workshop" ||
-      categoryValue === "Meeting"
-      ? categoryValue
-      : "Meeting";
-
-  if (!title && !row.id) return null;
-
-  const roles = Array.isArray(row.roles)
-    ? row.roles.filter((value): value is string => typeof value === "string")
-    : [];
-
-  return {
-    id: String(row.id ?? `${title}-${date || "event"}`),
-    title: title || "Untitled Event",
-    category,
-    date,
-    start: typeof row.start === "string" ? row.start : "09:00",
-    end: typeof row.end === "string" ? row.end : "10:00",
-    location: typeof row.location === "string" ? row.location : "TBD",
-    description: typeof row.description === "string" ? row.description : "",
-    roles,
-    featured: Boolean(row.featured),
-  };
-}
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -78,53 +38,12 @@ function Index() {
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<YabEvent | null>(null);
   const [open, setOpen] = useState(false);
-  const [allEvents, setAllEvents] = useState<YabEvent[]>(events);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    let isMounted = true;
-
-    async function loadEvents() {
-      try {
-        const { data, error } = await supabase
-          .from("events")
-          .select("*")
-          .order("date", { ascending: true, nullsFirst: false })
-          .order("event_date", { ascending: true, nullsFirst: false });
-
-        if (error) throw error;
-
-        const nextEvents = (data ?? [])
-          .map((row) => normalizeSupabaseEvent(row as Record<string, unknown>))
-          .filter((event): event is YabEvent => Boolean(event));
-
-        if (isMounted) {
-          setAllEvents(nextEvents.length > 0 ? nextEvents : events);
-        }
-      } catch (error) {
-        console.error("Error fetching events from Supabase:", error);
-        if (isMounted) {
-          setAllEvents(events);
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
-      }
-    }
-
-    loadEvents();
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  const featured = allEvents.find((e) => e.featured) ?? allEvents[0] ?? null;
+  const featured = events.find((e) => e.featured) ?? events[0]!;
 
   const visible = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return allEvents
+    return events
       .filter((e) => (filter === "All" ? true : e.category === filter))
       .filter(
         (e) =>
@@ -134,7 +53,7 @@ function Index() {
           e.location.toLowerCase().includes(q),
       )
       .sort((a, b) => a.date.localeCompare(b.date));
-  }, [allEvents, filter, search]);
+  }, [filter, search]);
 
   function openSignUp(event: YabEvent) {
     setSelected(event);
@@ -169,7 +88,7 @@ function Index() {
               </Button>
               <Button
                 size="lg"
-                onClick={() => featured && openSignUp(featured)}
+                onClick={() => openSignUp(featured)}
                 className="bg-gradient-warm font-semibold text-sunny-foreground hover:opacity-90"
               >
                 Join a Committee / Sign Up
@@ -183,16 +102,12 @@ function Index() {
                   Next major event
                 </p>
                 <p className="text-lg font-semibold">
-                  {featured
-                    ? `${featured.title} — ${formatEventDate(featured.date)} · Coming soon!`
-                    : "No upcoming events yet"}
+                  {featured.title} — {formatEventDate(featured.date)} · Coming soon!
                 </p>
               </div>
-              {featured && (
-                <Button variant="secondary" onClick={() => openSignUp(featured)}>
-                  Sign up
-                </Button>
-              )}
+              <Button variant="secondary" onClick={() => openSignUp(featured)}>
+                Sign up
+              </Button>
             </div>
           </div>
         </section>
@@ -209,8 +124,8 @@ function Index() {
                 key={f.value}
                 onClick={() => setFilter(f.value)}
                 className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${filter === f.value
-                    ? "border-transparent bg-primary text-primary-foreground"
-                    : "border-border bg-card text-muted-foreground hover:bg-secondary hover:text-foreground"
+                  ? "border-transparent bg-primary text-primary-foreground"
+                  : "border-border bg-card text-muted-foreground hover:bg-secondary hover:text-foreground"
                   }`}
               >
                 {f.label}
@@ -218,11 +133,7 @@ function Index() {
             ))}
           </div>
 
-          {loading && allEvents.length === 0 ? (
-            <p className="mt-12 rounded-2xl border border-dashed border-border p-12 text-center text-muted-foreground">
-              Loading upcoming events...
-            </p>
-          ) : visible.length === 0 ? (
+          {visible.length === 0 ? (
             <p className="mt-12 rounded-2xl border border-dashed border-border p-12 text-center text-muted-foreground">
               No events match that search yet — try another filter.
             </p>
