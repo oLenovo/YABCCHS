@@ -1,14 +1,14 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowRight, CalendarDays, PartyPopper } from "lucide-react";
+import { ArrowRight, CalendarDays, PartyPopper, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { EventCard } from "@/components/EventCard";
 import { SignUpDialog } from "@/components/SignUpDialog";
+import { supabase } from "@/integrations/supabase/client";
 import {
   CATEGORY_FILTERS,
-  events,
   formatEventDate,
   type EventCategory,
   type YabEvent,
@@ -34,26 +34,58 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const [eventsList, setEventsList] = useState<YabEvent[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"All" | EventCategory>("All");
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<YabEvent | null>(null);
   const [open, setOpen] = useState(false);
 
-  const featured = events.find((e) => e.featured) ?? events[0]!;
+  // Fetch events from Supabase on load
+  useEffect(() => {
+    async function fetchSupabaseEvents() {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("events")
+        .select("*")
+        .order("event_date", { ascending: true });
+
+      if (error) {
+        console.error("Error fetching events from Supabase:", error);
+      } else if (data) {
+        // Map database columns to match the component expectations
+        const formattedEvents: YabEvent[] = data.map((item: any) => ({
+          id: item.id,
+          title: item.title,
+          description: item.description || "",
+          date: item.event_date,
+          category: item.category as EventCategory,
+          location: item.location || "",
+          featured: item.featured || false,
+        }));
+        setEventsList(formattedEvents);
+      }
+      setLoading(false);
+    }
+
+    fetchSupabaseEvents();
+  }, []);
+
+  const featured = eventsList.find((e) => e.featured) ?? eventsList[0];
 
   const visible = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return events
+    return eventsList
       .filter((e) => (filter === "All" ? true : e.category === filter))
       .filter(
         (e) =>
           !q ||
           e.title.toLowerCase().includes(q) ||
           e.description.toLowerCase().includes(q) ||
-          e.location.toLowerCase().includes(q),
+          e.location.toLowerCase().includes(q)
       )
       .sort((a, b) => a.date.localeCompare(b.date));
-  }, [filter, search]);
+  }, [eventsList, filter, search]);
 
   function openSignUp(event: YabEvent) {
     setSelected(event);
@@ -86,29 +118,33 @@ function Index() {
                   <ArrowRight className="size-4" />
                 </a>
               </Button>
-              <Button
-                size="lg"
-                onClick={() => openSignUp(featured)}
-                className="bg-gradient-warm font-semibold text-sunny-foreground hover:opacity-90"
-              >
-                Join a Committee / Sign Up
-              </Button>
+              {featured && (
+                <Button
+                  size="lg"
+                  onClick={() => openSignUp(featured)}
+                  className="bg-gradient-warm font-semibold text-sunny-foreground hover:opacity-90"
+                >
+                  Join a Committee / Sign Up
+                </Button>
+              )}
             </div>
 
-            <div className="mt-12 flex flex-wrap items-center gap-4 rounded-2xl border border-card/60 bg-card/60 p-5 backdrop-blur-sm">
-              <CalendarDays className="size-6" />
-              <div className="flex-1">
-                <p className="text-sm uppercase tracking-widest text-muted-foreground">
-                  Next major event
-                </p>
-                <p className="text-lg font-semibold">
-                  {featured.title} — {formatEventDate(featured.date)} · Coming soon!
-                </p>
+            {featured && (
+              <div className="mt-12 flex flex-wrap items-center gap-4 rounded-2xl border border-card/60 bg-card/60 p-5 backdrop-blur-sm">
+                <CalendarDays className="size-6" />
+                <div className="flex-1">
+                  <p className="text-sm uppercase tracking-widest text-muted-foreground">
+                    Next major event
+                  </p>
+                  <p className="text-lg font-semibold">
+                    {featured.title} — {formatEventDate(featured.date)} · Coming soon!
+                  </p>
+                </div>
+                <Button variant="secondary" onClick={() => openSignUp(featured)}>
+                  Sign up
+                </Button>
               </div>
-              <Button variant="secondary" onClick={() => openSignUp(featured)}>
-                Sign up
-              </Button>
-            </div>
+            )}
           </div>
         </section>
 
@@ -124,8 +160,8 @@ function Index() {
                 key={f.value}
                 onClick={() => setFilter(f.value)}
                 className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${filter === f.value
-                  ? "border-transparent bg-primary text-primary-foreground"
-                  : "border-border bg-card text-muted-foreground hover:bg-secondary hover:text-foreground"
+                    ? "border-transparent bg-primary text-primary-foreground"
+                    : "border-border bg-card text-muted-foreground hover:bg-secondary hover:text-foreground"
                   }`}
               >
                 {f.label}
@@ -133,9 +169,14 @@ function Index() {
             ))}
           </div>
 
-          {visible.length === 0 ? (
+          {loading ? (
+            <div className="mt-12 flex items-center justify-center gap-2 p-12 text-muted-foreground">
+              <Loader2 className="size-5 animate-spin" />
+              <span>Loading events from database...</span>
+            </div>
+          ) : visible.length === 0 ? (
             <p className="mt-12 rounded-2xl border border-dashed border-border p-12 text-center text-muted-foreground">
-              No events match that search yet — try another filter.
+              No events match that search yet — try another filter or add events in Supabase!
             </p>
           ) : (
             <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -152,3 +193,4 @@ function Index() {
     </div>
   );
 }
+
