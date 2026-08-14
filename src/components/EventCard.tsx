@@ -21,11 +21,7 @@ const badgeStyles: Record<YabEvent["category"], string> = {
   Meeting: "bg-primary/10 text-primary",
 };
 
-export function EventCard({
-  event,
-}: {
-  event: YabEvent;
-}) {
+export function EventCard({ event }: { event: YabEvent }) {
   return (
     <article className="group flex flex-col rounded-2xl border border-border bg-card p-6 shadow-card transition-all duration-200 hover:-translate-y-1 hover:shadow-lift">
       <span

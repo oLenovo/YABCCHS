@@ -18,13 +18,18 @@ function normalizeSupabaseEvent(row: Record<string, unknown>): YabEvent | null {
   if (!row || typeof row !== "object") return null;
 
   const title = typeof row.title === "string" ? row.title.trim() : "";
-  const date = typeof row.date === "string" ? row.date : typeof row.event_date === "string" ? row.event_date : "";
+  const date =
+    typeof row.date === "string"
+      ? row.date
+      : typeof row.event_date === "string"
+        ? row.event_date
+        : "";
   const categoryValue = typeof row.category === "string" ? row.category : "Meeting";
   const category: EventCategory =
     categoryValue === "Culture" ||
-      categoryValue === "Volunteering" ||
-      categoryValue === "Workshop" ||
-      categoryValue === "Meeting"
+    categoryValue === "Volunteering" ||
+    categoryValue === "Workshop" ||
+    categoryValue === "Meeting"
       ? categoryValue
       : "Meeting";
 
@@ -60,7 +65,8 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "Youth Advisory Board — Student Events" },
       {
         property: "og:description",
-        content: "Upcoming fests, workshops, meetings and volunteer opportunities from Creek students.",
+        content:
+          "Upcoming fests, workshops, meetings and volunteer opportunities from Creek students.",
       },
     ],
   }),
@@ -144,8 +150,8 @@ function Index() {
               Good vibes, big events, all made by Creek students.
             </h1>
             <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
-              Fests, workshops, volunteer opportunities and Monday meetings in IC 715 — just a
-              quick look at what’s happening around Creek.
+              Fests, workshops, volunteer opportunities and Monday meetings in IC 715 — just a quick
+              look at what’s happening around Creek.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
@@ -184,10 +190,11 @@ function Index() {
               <button
                 key={f.value}
                 onClick={() => setFilter(f.value)}
-                className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${filter === f.value
-                  ? "border-transparent bg-primary text-primary-foreground"
-                  : "border-border bg-card text-muted-foreground hover:bg-secondary hover:text-foreground"
-                  }`}
+                className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+                  filter === f.value
+                    ? "border-transparent bg-primary text-primary-foreground"
+                    : "border-border bg-card text-muted-foreground hover:bg-secondary hover:text-foreground"
+                }`}
               >
                 {f.label}
               </button>
