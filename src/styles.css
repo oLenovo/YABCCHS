@@ -88,7 +88,12 @@
   --sidebar-border: oklch(0.9 0.03 250);
   --sidebar-ring: oklch(0.78 0.1 245);
 
-  --gradient-hero: linear-gradient(140deg, oklch(0.86 0.07 250), oklch(0.9 0.06 235) 45%, oklch(0.93 0.07 90));
+  --gradient-hero: linear-gradient(
+    140deg,
+    oklch(0.86 0.07 250),
+    oklch(0.9 0.06 235) 45%,
+    oklch(0.93 0.07 90)
+  );
   --gradient-warm: linear-gradient(120deg, var(--sunny), var(--coral));
   --gradient-sky: linear-gradient(160deg, oklch(0.93 0.05 250), oklch(0.97 0.03 90));
   --shadow-card: 0 12px 28px -18px oklch(0.45 0.06 60 / 0.4);

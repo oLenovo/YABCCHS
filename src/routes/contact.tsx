@@ -44,16 +44,16 @@ function ContactPage() {
             <Mail className="size-6 text-accent" />
             <div>
               <h2 className="font-semibold">Email the board</h2>
-              <p className="text-sm text-muted-foreground">creekyab@student.cherrycreekschools.org</p>
+              <p className="text-sm text-muted-foreground">
+                creekyab@student.cherrycreekschools.org
+              </p>
             </div>
           </a>
           <div className="flex items-start gap-4 rounded-2xl border border-border bg-card p-6 shadow-card">
             <MapPin className="size-6 text-accent" />
             <div>
               <h2 className="font-semibold">Where we meet</h2>
-              <p className="text-sm text-muted-foreground">
-                IC 715 · Mondays after school
-              </p>
+              <p className="text-sm text-muted-foreground">IC 715 · Mondays after school</p>
             </div>
           </div>
           <a
@@ -92,8 +92,8 @@ function ContactPage() {
         <div className="mt-10 rounded-2xl bg-gradient-warm p-8 text-coral-foreground">
           <h2 className="text-2xl font-bold">Anonymous feedback form</h2>
           <p className="mt-2 max-w-xl">
-            Tell us what events you want to see — no name needed. Responses go straight to the
-            board leads.
+            Tell us what events you want to see — no name needed. Responses go straight to the board
+            leads.
           </p>
           <a
             href="https://forms.gle"
