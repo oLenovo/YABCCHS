@@ -41,31 +41,36 @@ function Index() {
   const [selected, setSelected] = useState<YabEvent | null>(null);
   const [open, setOpen] = useState(false);
 
-  // Fetch events from Supabase on load
   useEffect(() => {
     async function fetchSupabaseEvents() {
       setLoading(true);
-      const { data, error } = await supabase
-        .from("events")
-        .select("*")
-        .order("event_date", { ascending: true });
+      try {
+        const { data, error } = await supabase
+          .from("events")
+          .select("*")
+          .order("event_date", { ascending: true });
 
-      if (error) {
-        console.error("Error fetching events from Supabase:", error);
-      } else if (data) {
-        // Map database columns to match the component expectations
-        const formattedEvents: YabEvent[] = data.map((item: any) => ({
-          id: item.id,
-          title: item.title,
-          description: item.description || "",
-          date: item.event_date,
-          category: item.category as EventCategory,
-          location: item.location || "",
-          featured: item.featured || false,
-        }));
-        setEventsList(formattedEvents);
+        if (error) {
+          console.error("Error fetching events from Supabase:", error);
+        } else if (data) {
+          // Safely map values with fallbacks to avoid crashes
+          const formattedEvents: YabEvent[] = data.map((item: any) => ({
+            id: item.id || String(Math.random()),
+            title: item.title || "Untitled Event",
+            description: item.description || "",
+            // Use event_date, or fall back to created_at or today's date if missing
+            date: item.event_date || item.created_at || new Date().toISOString(),
+            category: (item.category as EventCategory) || "General",
+            location: item.location || "TBD",
+            featured: Boolean(item.featured),
+          }));
+          setEventsList(formattedEvents);
+        }
+      } catch (err) {
+        console.error("Unexpected error fetching events:", err);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
 
     fetchSupabaseEvents();
@@ -80,11 +85,11 @@ function Index() {
       .filter(
         (e) =>
           !q ||
-          e.title.toLowerCase().includes(q) ||
-          e.description.toLowerCase().includes(q) ||
-          e.location.toLowerCase().includes(q)
+          (e.title && e.title.toLowerCase().includes(q)) ||
+          (e.description && e.description.toLowerCase().includes(q)) ||
+          (e.location && e.location.toLowerCase().includes(q))
       )
-      .sort((a, b) => a.date.localeCompare(b.date));
+      .sort((a, b) => (a.date || "").localeCompare(b.date || ""));
   }, [eventsList, filter, search]);
 
   function openSignUp(event: YabEvent) {
@@ -193,4 +198,3 @@ function Index() {
     </div>
   );
 }
-
