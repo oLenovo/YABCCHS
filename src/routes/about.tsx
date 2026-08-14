@@ -9,12 +9,12 @@ export const Route = createFileRoute("/about")({
       {
         name: "description",
         content:
-          "Meet the student-led Youth Advisory Board: our committees, how we plan school events, and how to join.",
+          "Meet the student-led Youth Advisory Board: our committees, how we plan school events, and what we’re all about.",
       },
       { property: "og:title", content: "About the Youth Advisory Board" },
       {
         property: "og:description",
-        content: "Our committees, our mission, and how students can join the board.",
+        content: "Our committees, our mission, and the student events we plan all year.",
       },
     ],
   }),
@@ -67,10 +67,10 @@ function AboutPage() {
         </div>
 
         <div className="mt-14 rounded-2xl bg-gradient-hero p-8 text-foreground">
-          <h2 className="text-2xl font-bold">How to join</h2>
+          <h2 className="text-2xl font-bold">Stay in the loop</h2>
           <p className="mt-2 max-w-2xl text-muted-foreground">
-            Drop by any Monday meeting in IC 715, sign up for a volunteer slot on the events page, or
-            join our Remind to get updates. All grades welcome, always.
+            Drop by any Monday meeting in IC 715 or follow us on social media for updates on events,
+            service projects, and student-led initiatives. All grades welcome, always.
           </p>
         </div>
       </main>

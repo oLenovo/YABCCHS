@@ -36,11 +36,6 @@ export function SiteFooter() {
                 Feedback form
               </Link>
             </li>
-            <li>
-              <Link to="/contact" className="transition-colors hover:text-foreground">
-                Join our Remind
-              </Link>
-            </li>
           </ul>
         </div>
 

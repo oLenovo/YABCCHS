@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { EventCard } from "@/components/EventCard";
-import { SignUpDialog } from "@/components/SignUpDialog";
 import { supabase } from "@/integrations/supabase/client";
 import {
   CATEGORY_FILTERS,
@@ -52,16 +51,16 @@ function normalizeSupabaseEvent(row: Record<string, unknown>): YabEvent | null {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Youth Advisory Board — Student Events & Sign-Ups" },
+      { title: "Youth Advisory Board — Student Events" },
       {
         name: "description",
         content:
-          "Browse upcoming school events, cultural fests, workshops and volunteer slots — and sign up in seconds with our student Youth Advisory Board.",
+          "Browse upcoming school events, cultural fests, workshops and volunteer opportunities from the Youth Advisory Board.",
       },
-      { property: "og:title", content: "Youth Advisory Board — Student Events & Sign-Ups" },
+      { property: "og:title", content: "Youth Advisory Board — Student Events" },
       {
         property: "og:description",
-        content: "Upcoming fests, workshops, meetings and volunteer slots. Sign up in seconds.",
+        content: "Upcoming fests, workshops, meetings and volunteer opportunities from Creek students.",
       },
     ],
   }),
@@ -71,8 +70,6 @@ export const Route = createFileRoute("/")({
 function Index() {
   const [filter, setFilter] = useState<"All" | EventCategory>("All");
   const [search, setSearch] = useState("");
-  const [selected, setSelected] = useState<YabEvent | null>(null);
-  const [open, setOpen] = useState(false);
   const [eventsList, setEventsList] = useState<YabEvent[]>(events);
   const [loading, setLoading] = useState(true);
 
@@ -132,11 +129,6 @@ function Index() {
       .sort((a, b) => a.date.localeCompare(b.date));
   }, [eventsList, filter, search]);
 
-  function openSignUp(event: YabEvent) {
-    setSelected(event);
-    setOpen(true);
-  }
-
   return (
     <div className="min-h-screen">
       <SiteHeader search={search} onSearchChange={setSearch} />
@@ -152,8 +144,8 @@ function Index() {
               Good vibes, big events, all made by Creek students.
             </h1>
             <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
-              Fests, workshops, volunteer slots and our Monday meetings in IC 715 — find something
-              you love and grab your spot in under a minute.
+              Fests, workshops, volunteer opportunities and Monday meetings in IC 715 — just a
+              quick look at what’s happening around Creek.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
@@ -163,15 +155,6 @@ function Index() {
                   <ArrowRight className="size-4" />
                 </a>
               </Button>
-              {featured && (
-                <Button
-                  size="lg"
-                  onClick={() => openSignUp(featured)}
-                  className="bg-gradient-warm font-semibold text-sunny-foreground hover:opacity-90"
-                >
-                  Join a Committee / Sign Up
-                </Button>
-              )}
             </div>
 
             {featured && (
@@ -185,9 +168,6 @@ function Index() {
                     {featured.title} — {formatEventDate(featured.date)} · Coming soon!
                   </p>
                 </div>
-                <Button variant="secondary" onClick={() => openSignUp(featured)}>
-                  Sign up
-                </Button>
               </div>
             )}
           </div>
@@ -225,7 +205,7 @@ function Index() {
           ) : (
             <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {visible.map((e) => (
-                <EventCard key={e.id} event={e} onSignUp={openSignUp} />
+                <EventCard key={e.id} event={e} />
               ))}
             </div>
           )}
@@ -233,7 +213,6 @@ function Index() {
       </main>
 
       <SiteFooter />
-      <SignUpDialog event={selected} open={open} onOpenChange={setOpen} />
     </div>
   );
 }

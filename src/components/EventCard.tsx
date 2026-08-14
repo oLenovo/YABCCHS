@@ -23,10 +23,8 @@ const badgeStyles: Record<YabEvent["category"], string> = {
 
 export function EventCard({
   event,
-  onSignUp,
 }: {
   event: YabEvent;
-  onSignUp: (event: YabEvent) => void;
 }) {
   return (
     <article className="group flex flex-col rounded-2xl border border-border bg-card p-6 shadow-card transition-all duration-200 hover:-translate-y-1 hover:shadow-lift">
@@ -58,13 +56,10 @@ export function EventCard({
         {event.description}
       </p>
 
-      <div className="mt-6 flex flex-wrap gap-2">
-        <Button onClick={() => onSignUp(event)} className="flex-1">
-          Sign Up
-        </Button>
+      <div className="mt-6">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="flex-1">
+            <Button variant="outline" className="w-full">
               <CalendarPlus className="size-4" />
               Add to Calendar
             </Button>
