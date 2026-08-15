@@ -270,10 +270,10 @@ function Index() {
                     DayContent: ({ date }) => {
                       const hasEvent = eventDates.has(formatDateKey(date));
                       return (
-                        <div className="relative flex h-full w-full items-center justify-center">
-                          <span>{date.getDate()}</span>
+                        <div className="flex h-full w-full flex-col items-center justify-center gap-1 p-0.5">
+                          <span className="leading-none">{date.getDate()}</span>
                           {hasEvent && (
-                            <span className="absolute bottom-1 h-1.5 w-1.5 rounded-full bg-primary" />
+                            <span className="h-1.5 w-2.5 rounded-full bg-primary" />
                           )}
                         </div>
                       );
