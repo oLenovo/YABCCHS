@@ -268,13 +268,26 @@ function Index() {
                   className="mx-auto w-full max-w-[620px]"
                   components={{
                     DayContent: ({ date }) => {
-                      const hasEvent = eventDates.has(formatDateKey(date));
+                      const isoDay = formatDateKey(date);
+                      const hasEvent = eventDates.has(isoDay);
+                      const isSelected = selectedDate && formatDateKey(selectedDate) === isoDay;
+                      const isToday = formatDateKey(new Date()) === isoDay;
+
+                      const backgroundClass = isSelected
+                        ? "bg-[#7a4b39] text-white"
+                        : isToday
+                          ? "bg-[#1e90ff] text-white"
+                          : hasEvent
+                            ? "bg-[#f7c89f] text-[#3b2a22]"
+                            : "bg-transparent text-foreground";
+
                       return (
-                        <div className="flex h-full w-full flex-col items-center justify-center gap-1 p-0.5">
-                          <span className="leading-none">{date.getDate()}</span>
-                          {hasEvent && (
-                            <span className="h-1.5 w-2.5 rounded-full bg-[#1e90ff]" />
-                          )}
+                        <div className="flex h-full w-full items-center justify-center">
+                          <span
+                            className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium transition-colors ${backgroundClass}`}
+                          >
+                            {date.getDate()}
+                          </span>
                         </div>
                       );
                     },
