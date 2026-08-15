@@ -229,8 +229,8 @@ function Index() {
                 type="button"
                 onClick={() => setView("cards")}
                 className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${view === "cards"
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:text-foreground"
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:text-foreground"
                   }`}
               >
                 List view
@@ -239,8 +239,8 @@ function Index() {
                 type="button"
                 onClick={() => setView("calendar")}
                 className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${view === "calendar"
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:text-foreground"
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:text-foreground"
                   }`}
               >
                 Calendar view
@@ -265,7 +265,7 @@ function Index() {
                   onSelect={(date) => setSelectedDate(date ?? undefined)}
                   month={month}
                   onMonthChange={setMonth}
-                  className="mx-auto"
+                  className="mx-auto w-full max-w-[620px]"
                   components={{
                     DayContent: ({ date }) => {
                       const hasEvent = eventDates.has(formatDateKey(date));
