@@ -273,7 +273,7 @@ function Index() {
                         <div className="flex h-full w-full flex-col items-center justify-center gap-1 p-0.5">
                           <span className="leading-none">{date.getDate()}</span>
                           {hasEvent && (
-                            <span className="h-1.5 w-2.5 rounded-full bg-primary" />
+                            <span className="h-1.5 w-2.5 rounded-full bg-[#1e90ff]" />
                           )}
                         </div>
                       );
