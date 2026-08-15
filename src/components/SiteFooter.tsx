@@ -13,13 +13,13 @@ export function SiteFooter() {
             <span className="font-display text-base font-bold">CCHS Youth Advisory Board</span>
           </div>
           <p className="mt-3 max-w-xs text-sm text-muted-foreground">
-            Promoting positivity and wellness at Creek 🍒 — student-run events, service projects and
+            Promoting positivity and wellness at Creek 🍒 — student-run events and
             good vibes all year.
           </p>
         </div>
 
         <div>
-          <h3 className="text-sm font-semibold uppercase tracking-wide">School resources</h3>
+          <h3 className="text-sm font-semibold uppercase tracking-wide">Resources</h3>
           <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
             <li>
               <Link to="/" hash="events" className="transition-colors hover:text-foreground">
@@ -28,7 +28,7 @@ export function SiteFooter() {
             </li>
             <li>
               <Link to="/about" className="transition-colors hover:text-foreground">
-                Committees &amp; roles
+                About Us
               </Link>
             </li>
             <li>

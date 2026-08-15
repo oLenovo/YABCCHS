@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { ArrowRight, CalendarDays, PartyPopper } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { EventCard } from "@/components/EventCard";
@@ -66,11 +67,25 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
+function formatDateKey(date: Date) {
+  const normalized = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+  return normalized.toISOString().slice(0, 10);
+}
+
 function Index() {
   const [filter, setFilter] = useState<"All" | EventCategory>("All");
   const [search, setSearch] = useState("");
   const [eventsList, setEventsList] = useState<YabEvent[]>(events);
   const [loading, setLoading] = useState(true);
+  const [view, setView] = useState<"cards" | "calendar">("cards");
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(() => {
+    const firstEventDate = events[0]?.date;
+    return firstEventDate ? new Date(`${firstEventDate}T12:00:00`) : new Date();
+  });
+  const [month, setMonth] = useState<Date>(() => {
+    const firstEventDate = events[0]?.date;
+    return firstEventDate ? new Date(`${firstEventDate}T12:00:00`) : new Date();
+  });
 
   useEffect(() => {
     let isMounted = true;
@@ -128,6 +143,21 @@ function Index() {
       .sort((a, b) => a.date.localeCompare(b.date));
   }, [eventsList, filter, search]);
 
+  const eventDates = useMemo(() => new Set(visible.map((event) => event.date)), [visible]);
+
+  const selectedDayEvents = useMemo(() => {
+    if (!selectedDate) return [];
+    const selectedKey = formatDateKey(selectedDate);
+    return visible.filter((event) => event.date === selectedKey);
+  }, [selectedDate, visible]);
+
+  useEffect(() => {
+    if (visible.length === 0) return;
+    const firstVisibleDate = new Date(`${visible[0].date}T12:00:00`);
+    setMonth(firstVisibleDate);
+    setSelectedDate(firstVisibleDate);
+  }, [visible]);
+
   return (
     <div className="min-h-screen">
       <SiteHeader search={search} onSearchChange={setSearch} />
@@ -178,19 +208,44 @@ function Index() {
             Pick what you're into, or search from the bar up top — everyone's welcome.
           </p>
 
-          <div className="mt-6 flex flex-wrap gap-2">
-            {CATEGORY_FILTERS.map((f) => (
+          <div className="mt-6 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex flex-wrap gap-2">
+              {CATEGORY_FILTERS.map((f) => (
+                <button
+                  key={f.value}
+                  onClick={() => setFilter(f.value)}
+                  className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${filter === f.value
+                    ? "border-transparent bg-primary text-primary-foreground"
+                    : "border-border bg-card text-muted-foreground hover:bg-secondary hover:text-foreground"
+                    }`}
+                >
+                  {f.label}
+                </button>
+              ))}
+            </div>
+
+            <div className="inline-flex rounded-full border border-border bg-card p-1">
               <button
-                key={f.value}
-                onClick={() => setFilter(f.value)}
-                className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${filter === f.value
-                  ? "border-transparent bg-primary text-primary-foreground"
-                  : "border-border bg-card text-muted-foreground hover:bg-secondary hover:text-foreground"
+                type="button"
+                onClick={() => setView("cards")}
+                className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${view === "cards"
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground"
                   }`}
               >
-                {f.label}
+                List view
               </button>
-            ))}
+              <button
+                type="button"
+                onClick={() => setView("calendar")}
+                className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${view === "calendar"
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                  }`}
+              >
+                Calendar view
+              </button>
+            </div>
           </div>
 
           {loading ? (
@@ -201,6 +256,62 @@ function Index() {
             <p className="mt-12 rounded-2xl border border-dashed border-border p-12 text-center text-muted-foreground">
               No events match that search yet — try another filter.
             </p>
+          ) : view === "calendar" ? (
+            <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,0.9fr)]">
+              <div className="rounded-2xl border border-border bg-card p-4 shadow-card">
+                <Calendar
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={(date) => setSelectedDate(date ?? undefined)}
+                  month={month}
+                  onMonthChange={setMonth}
+                  className="mx-auto"
+                  components={{
+                    DayContent: ({ date }) => {
+                      const hasEvent = eventDates.has(formatDateKey(date));
+                      return (
+                        <div className="relative flex h-full w-full items-center justify-center">
+                          <span>{date.getDate()}</span>
+                          {hasEvent && (
+                            <span className="absolute bottom-1 h-1.5 w-1.5 rounded-full bg-primary" />
+                          )}
+                        </div>
+                      );
+                    },
+                  }}
+                />
+              </div>
+
+              <div className="rounded-2xl border border-border bg-card p-5 shadow-card">
+                <h3 className="text-lg font-semibold">
+                  {selectedDate
+                    ? selectedDate.toLocaleDateString("en-US", {
+                      month: "long",
+                      day: "numeric",
+                      year: "numeric",
+                    })
+                    : "Select a date"}
+                </h3>
+
+                <div className="mt-4 space-y-3">
+                  {selectedDayEvents.length > 0 ? (
+                    selectedDayEvents.map((event) => (
+                      <div key={event.id} className="rounded-xl border border-border bg-secondary/40 p-3">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                          {event.category}
+                        </p>
+                        <p className="mt-1 font-semibold text-foreground">{event.title}</p>
+                        <p className="mt-1 text-sm text-muted-foreground">
+                          {formatEventDate(event.date)} · {event.location}
+                        </p>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-sm text-muted-foreground">No events on this date.</p>
+                  )}
+                </div>
+              </div>
+            </div>
           ) : (
             <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {visible.map((e) => (
