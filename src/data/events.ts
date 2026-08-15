@@ -1,4 +1,4 @@
-export type EventCategory = "Culture" | "Volunteering" | "Workshop" | "Meeting";
+export type EventCategory = "Volunteering" | "Workshop" | "Meeting";
 
 export type YabEvent = {
   id: string;
@@ -15,17 +15,16 @@ export type YabEvent = {
 
 export const CATEGORY_FILTERS: { label: string; value: "All" | EventCategory }[] = [
   { label: "All", value: "All" },
-  { label: "Cultural Fests", value: "Culture" },
   { label: "Volunteering", value: "Volunteering" },
-  { label: "Workshops", value: "Workshop" },
-  { label: "Meetings", value: "Meeting" },
+  { label: "Clubs", value: "Workshop" },
+  { label: "PTCO", value: "Meeting" },
 ];
 
 export const events: YabEvent[] = [
   {
     id: "ethnic-fest",
     title: "Ethnic Fest 2026",
-    category: "Culture",
+    category: "Meeting",
     date: "2026-09-19",
     start: "16:00",
     end: "20:00",

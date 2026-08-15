@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Instagram, Mail, MapPin, Music2 } from "lucide-react";
+import { BellRing, Instagram, Mail, MapPin } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 
@@ -69,15 +69,15 @@ function ContactPage() {
             </div>
           </a>
           <a
-            href="https://tiktok.com/@creekyab"
+            href="https://www.remind.com/join/creekyab"
             target="_blank"
             rel="noreferrer"
             className="flex items-start gap-4 rounded-2xl border border-border bg-card p-6 shadow-card transition-all hover:-translate-y-1 hover:shadow-lift"
           >
-            <Music2 className="size-6 text-coral" />
+            <BellRing className="size-6 text-coral" />
             <div>
-              <h2 className="font-semibold">TikTok</h2>
-              <p className="text-sm text-muted-foreground">@creekyab</p>
+              <h2 className="font-semibold">Remind</h2>
+              <p className="text-sm text-muted-foreground">remind.com/join/creekyab</p>
             </div>
           </a>
         </div>
@@ -96,7 +96,7 @@ function ContactPage() {
             board leads.
           </p>
           <a
-            href="https://forms.gle"
+            href="https://docs.google.com/forms/d/e/1FAIpQLSdVVr-8mLhopMugPFTGYc5lkMRBmv3LKLJehjH_LjW0yh_-sg/viewform?usp=publish-editor"
             target="_blank"
             rel="noreferrer"
             className="mt-5 inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:scale-105"

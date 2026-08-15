@@ -15,7 +15,6 @@ import {
 } from "@/data/events";
 
 const badgeStyles: Record<YabEvent["category"], string> = {
-  Culture: "bg-coral/15 text-coral",
   Volunteering: "bg-accent/20 text-accent-foreground",
   Workshop: "bg-sunny/25 text-sunny-foreground",
   Meeting: "bg-primary/10 text-primary",

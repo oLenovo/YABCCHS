@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Instagram, Music2, Sparkles } from "lucide-react";
+import { BellRing, Instagram, Sparkles } from "lucide-react";
 
 export function SiteFooter() {
   return (
@@ -52,13 +52,13 @@ export function SiteFooter() {
               <Instagram className="size-5" />
             </a>
             <a
-              href="https://tiktok.com/@creekyab"
+              href="https://www.remind.com/join/creekyab"
               target="_blank"
               rel="noreferrer"
-              aria-label="TikTok"
+              aria-label="Remind"
               className="flex size-10 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
             >
-              <Music2 className="size-5" />
+              <BellRing className="size-5" />
             </a>
           </div>
         </div>

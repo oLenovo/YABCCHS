@@ -21,8 +21,7 @@ function normalizeSupabaseEvent(row: Record<string, unknown>): YabEvent | null {
   const date = typeof row.date === "string" ? row.date : typeof row.event_date === "string" ? row.event_date : "";
   const categoryValue = typeof row.category === "string" ? row.category : "Meeting";
   const category: EventCategory =
-    categoryValue === "Culture" ||
-      categoryValue === "Volunteering" ||
+    categoryValue === "Volunteering" ||
       categoryValue === "Workshop" ||
       categoryValue === "Meeting"
       ? categoryValue
