@@ -21,19 +21,7 @@ export const CATEGORY_FILTERS: { label: string; value: "All" | EventCategory }[]
 ];
 
 export const events: YabEvent[] = [
-  {
-    id: "ethnic-fest",
-    title: "Ethnic Fest 2026",
-    category: "Meeting",
-    date: "2026-09-19",
-    start: "16:00",
-    end: "20:00",
-    location: "Main Gym & Courtyard",
-    description:
-      "Our biggest celebration of the year — food booths, music, dance performances and culture clubs from across the school.",
-    roles: ["Attendee", "Volunteer", "Booth Host", "Performer"],
-    featured: true,
-  },
+
 ];
 
 export function formatEventDate(iso: string) {

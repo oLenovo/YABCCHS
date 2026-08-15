@@ -173,7 +173,7 @@ function Index() {
               Good vibes, big events, all made by Creek students.
             </h1>
             <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
-              Fests, workshops, volunteer opportunities and Monday meetings in IC 715 — just a
+              Clubs, meetings, volunteer opportunities, Monday meetings in IC 715 — just a
               quick look at what’s happening around Creek.
             </p>
 
