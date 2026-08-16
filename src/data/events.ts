@@ -1,13 +1,20 @@
-export type EventCategory = "Volunteering" | "Workshop" | "Meeting";
+export type EventCategory = "Volunteering" | "Clubs" | "PTCO";
 
-export const CATEGORY_LABELS: Record<EventCategory, string> = {
-  Volunteering: "Volunteering",
-  Workshop: "Clubs",
-  Meeting: "PTCO",
-};
-
-export function getCategoryLabel(category: EventCategory) {
-  return CATEGORY_LABELS[category] ?? category;
+export function normalizeEventCategory(category: string): EventCategory {
+  switch (category) {
+    case "Volunteering":
+      return "Volunteering";
+    case "Clubs":
+      return "Clubs";
+    case "PTCO":
+      return "PTCO";
+    case "Workshop":
+      return "Clubs";
+    case "Meeting":
+      return "PTCO";
+    default:
+      return "PTCO";
+  }
 }
 
 export type YabEvent = {
@@ -26,8 +33,8 @@ export type YabEvent = {
 export const CATEGORY_FILTERS: { label: string; value: "All" | EventCategory }[] = [
   { label: "All", value: "All" },
   { label: "Volunteering", value: "Volunteering" },
-  { label: "Clubs", value: "Workshop" },
-  { label: "PTCO", value: "Meeting" },
+  { label: "Clubs", value: "Clubs" },
+  { label: "PTCO", value: "PTCO" },
 ];
 
 export const events: YabEvent[] = [
