@@ -9,6 +9,7 @@ import {
 import {
   formatEventDate,
   formatTime,
+  getCategoryLabel,
   googleCalendarUrl,
   icsDataUrl,
   type YabEvent,
@@ -30,7 +31,7 @@ export function EventCard({
       <span
         className={`w-fit rounded-full px-3 py-1 text-xs font-semibold ${badgeStyles[event.category]}`}
       >
-        {event.category}
+        {getCategoryLabel(event.category)}
       </span>
       <h3 className="mt-3 text-xl font-bold">{event.title}</h3>
 

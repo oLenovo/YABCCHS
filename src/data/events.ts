@@ -1,5 +1,15 @@
 export type EventCategory = "Volunteering" | "Workshop" | "Meeting";
 
+export const CATEGORY_LABELS: Record<EventCategory, string> = {
+  Volunteering: "Volunteering",
+  Workshop: "Clubs",
+  Meeting: "PTCO",
+};
+
+export function getCategoryLabel(category: EventCategory) {
+  return CATEGORY_LABELS[category] ?? category;
+}
+
 export type YabEvent = {
   id: string;
   title: string;

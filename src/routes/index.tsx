@@ -11,6 +11,7 @@ import {
   CATEGORY_FILTERS,
   events,
   formatEventDate,
+  getCategoryLabel,
   type EventCategory,
   type YabEvent,
 } from "@/data/events";
@@ -21,11 +22,17 @@ function normalizeSupabaseEvent(row: Record<string, unknown>): YabEvent | null {
   const title = typeof row.title === "string" ? row.title.trim() : "";
   const date = typeof row.date === "string" ? row.date : typeof row.event_date === "string" ? row.event_date : "";
   const categoryValue = typeof row.category === "string" ? row.category : "Meeting";
+  const normalizedCategoryValue =
+    categoryValue === "Clubs"
+      ? "Workshop"
+      : categoryValue === "PTCO"
+        ? "Meeting"
+        : categoryValue;
   const category: EventCategory =
-    categoryValue === "Volunteering" ||
-      categoryValue === "Workshop" ||
-      categoryValue === "Meeting"
-      ? categoryValue
+    normalizedCategoryValue === "Volunteering" ||
+      normalizedCategoryValue === "Workshop" ||
+      normalizedCategoryValue === "Meeting"
+      ? normalizedCategoryValue
       : "Meeting";
 
   if (!title && !row.id) return null;
@@ -311,7 +318,7 @@ function Index() {
                     selectedDayEvents.map((event) => (
                       <div key={event.id} className="rounded-xl border border-border bg-secondary/40 p-3">
                         <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                          {event.category}
+                          {getCategoryLabel(event.category)}
                         </p>
                         <p className="mt-1 font-semibold text-foreground">{event.title}</p>
                         <p className="mt-1 text-sm text-muted-foreground">
