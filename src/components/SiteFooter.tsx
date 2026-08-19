@@ -64,7 +64,7 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="border-t border-border/70 py-5 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} Youth Advisory Board · Made by students
+        © {new Date().getFullYear()} Youth Advisory Board
       </div>
     </footer>
   );
