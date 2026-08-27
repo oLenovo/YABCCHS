@@ -44,7 +44,7 @@ function ContactPage() {
             <Mail className="size-6 text-accent" />
             <div>
               <h2 className="font-semibold">Email the board</h2>
-              <p className="text-sm text-muted-foreground">creekyab@student.cherrycreekschools.org</p>
+              <p className="text-sm text-muted-foreground">aguo@cherrycreekschools.org</p>
             </div>
           </a>
           <div className="flex items-start gap-4 rounded-2xl border border-border bg-card p-6 shadow-card">
