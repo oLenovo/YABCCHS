@@ -16,6 +16,32 @@ import {
   type YabEvent,
 } from "@/data/events";
 
+function normalizeSupabaseTime(value: unknown, fallback: string): string {
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    if (!trimmed) return fallback;
+
+    const isoMatch = trimmed.match(/T(\d{1,2}:\d{2})/);
+    if (isoMatch) return isoMatch[1];
+
+    const simpleMatch = trimmed.match(/^(\d{1,2}:\d{2})(?::\d{2})?/);
+    if (simpleMatch) return `${Number(simpleMatch[1].split(":")[0]).toString().padStart(2, "0")}:${simpleMatch[1].split(":")[1]}`;
+
+    const parsed = new Date(trimmed);
+    if (!Number.isNaN(parsed.getTime())) {
+      return parsed.toTimeString().slice(0, 5);
+    }
+
+    return fallback;
+  }
+
+  if (value instanceof Date) {
+    return value.toTimeString().slice(0, 5);
+  }
+
+  return fallback;
+}
+
 function normalizeSupabaseEvent(row: Record<string, unknown>): YabEvent | null {
   if (!row || typeof row !== "object") return null;
 
@@ -30,13 +56,22 @@ function normalizeSupabaseEvent(row: Record<string, unknown>): YabEvent | null {
     ? row.roles.filter((value): value is string => typeof value === "string")
     : [];
 
+  const start = normalizeSupabaseTime(
+    row.start ?? row.start_time ?? row.startTime,
+    "09:00",
+  );
+  const end = normalizeSupabaseTime(
+    row.end ?? row.end_time ?? row.endTime,
+    "10:00",
+  );
+
   return {
     id: String(row.id ?? `${title || "event"}-${date || "new"}`),
     title: title || "Untitled Event",
     category,
     date,
-    start: typeof row.start === "string" ? row.start : "09:00",
-    end: typeof row.end === "string" ? row.end : "10:00",
+    start,
+    end,
     location: typeof row.location === "string" ? row.location : "TBD",
     description: typeof row.description === "string" ? row.description : "",
     roles,
@@ -116,10 +151,22 @@ function Index() {
       }
     }
 
-    loadEvents();
+    void loadEvents();
+
+    const channel = supabase
+      .channel("events-live-updates")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "events" },
+        () => {
+          void loadEvents();
+        },
+      )
+      .subscribe();
 
     return () => {
       isMounted = false;
+      void channel.unsubscribe();
     };
   }, []);
 
