@@ -17,7 +17,7 @@ import {
 const badgeStyles: Record<YabEvent["category"], string> = {
   Volunteering: "bg-accent/20 text-accent-foreground",
   Clubs: "bg-sunny/25 text-sunny-foreground",
-  PTCO: "bg-primary/10 text-primary",
+  Athletics: "bg-primary/10 text-primary",
 };
 
 export function EventCard({

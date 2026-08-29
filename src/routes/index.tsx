@@ -47,7 +47,7 @@ function normalizeSupabaseEvent(row: Record<string, unknown>): YabEvent | null {
 
   const title = typeof row.title === "string" ? row.title.trim() : "";
   const date = typeof row.date === "string" ? row.date : typeof row.event_date === "string" ? row.event_date : "";
-  const categoryValue = typeof row.category === "string" ? row.category : "PTCO";
+  const categoryValue = typeof row.category === "string" ? row.category : "Athletics";
   const category: EventCategory = normalizeEventCategory(categoryValue);
 
   if (!title && !row.id) return null;

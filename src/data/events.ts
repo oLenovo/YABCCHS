@@ -1,4 +1,4 @@
-export type EventCategory = "Volunteering" | "Clubs" | "PTCO";
+export type EventCategory = "Volunteering" | "Clubs" | "Athletics";
 
 export function normalizeEventCategory(category: string): EventCategory {
   switch (category) {
@@ -6,14 +6,14 @@ export function normalizeEventCategory(category: string): EventCategory {
       return "Volunteering";
     case "Clubs":
       return "Clubs";
-    case "PTCO":
-      return "PTCO";
+    case "Athletics":
+      return "Athletics";
     case "Workshop":
       return "Clubs";
     case "Meeting":
-      return "PTCO";
+      return "Athletics";
     default:
-      return "PTCO";
+      return "Athletics";
   }
 }
 
@@ -34,7 +34,7 @@ export const CATEGORY_FILTERS: { label: string; value: "All" | EventCategory }[]
   { label: "All", value: "All" },
   { label: "Volunteering", value: "Volunteering" },
   { label: "Clubs", value: "Clubs" },
-  { label: "PTCO", value: "PTCO" },
+  { label: "Athletics", value: "Athletics" },
 ];
 
 export const events: YabEvent[] = [
