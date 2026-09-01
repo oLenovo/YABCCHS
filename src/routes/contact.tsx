@@ -52,7 +52,7 @@ function ContactPage() {
             <div>
               <h2 className="font-semibold">Where we meet</h2>
               <p className="text-sm text-muted-foreground">
-                IC 715 · Every other Monday after school
+                IC 719 · Every other Monday after school
               </p>
             </div>
           </div>

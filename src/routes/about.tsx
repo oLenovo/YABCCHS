@@ -44,7 +44,7 @@ function AboutPage() {
         <p className="mt-5 text-lg leading-relaxed text-muted-foreground">
           CCHS Youth Advisory Board is a group of students from every grade promoting positivity and
           wellness at Creek. We plan events, bring student voice to school leadership, and make it
-          easy for anyone to get involved. We meet after school on every other Monday in IC 715.
+          easy for anyone to get involved. We meet after school on every other Monday in IC 719.
         </p>
 
         <h2 className="mt-14 text-2xl font-bold">Our vision</h2>
@@ -60,7 +60,7 @@ function AboutPage() {
         <div className="mt-14 rounded-2xl bg-gradient-hero p-8 text-foreground">
           <h2 className="text-2xl font-bold">Stay in the loop</h2>
           <p className="mt-2 max-w-2xl text-muted-foreground">
-            Drop by a Monday meeting in IC 715 or follow us on social media for updates on events, and student-led initiatives. All grades welcome, always.
+            Drop by a Monday meeting in IC 719 or follow us on social media for updates on events, and student-led initiatives. All grades welcome, always.
           </p>
         </div>
       </main>
