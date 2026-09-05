@@ -75,6 +75,7 @@ function normalizeSupabaseEvent(row: Record<string, unknown>): YabEvent | null {
     location: typeof row.location === "string" ? row.location : "TBD",
     description: typeof row.description === "string" ? row.description : "",
     roles,
+    url: typeof row.url === "string" && row.url.trim() ? row.url.trim() : undefined,
     featured: Boolean(row.featured),
   };
 }

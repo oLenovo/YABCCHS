@@ -27,6 +27,7 @@ export type YabEvent = {
   location: string;
   description: string;
   roles: string[];
+  url?: string;
   featured?: boolean;
 };
 

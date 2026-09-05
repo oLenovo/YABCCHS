@@ -1,4 +1,4 @@
-import { CalendarPlus, Clock, MapPin, CalendarDays } from "lucide-react";
+import { CalendarPlus, Clock, ExternalLink, MapPin, CalendarDays } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -56,6 +56,14 @@ export function EventCard({
       </p>
 
       <div className="mt-6">
+        {event.url && (
+          <Button variant="default" className="mb-3 w-full" asChild>
+            <a href={event.url} target="_blank" rel="noreferrer">
+              Event details
+              <ExternalLink className="size-4" />
+            </a>
+          </Button>
+        )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="w-full">
