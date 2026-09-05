@@ -174,7 +174,13 @@ function Index() {
     };
   }, []);
 
-  const featured = eventsList.find((e) => e.featured) ?? eventsList[0] ?? null;
+  const today = formatDateKey(new Date());
+  const featured =
+    [...eventsList]
+      .filter((event) => event.date >= today)
+      .sort((a, b) => a.date.localeCompare(b.date))[0] ??
+    [...eventsList].sort((a, b) => b.date.localeCompare(a.date))[0] ??
+    null;
 
   const visible = useMemo(() => {
     const q = search.trim().toLowerCase();
