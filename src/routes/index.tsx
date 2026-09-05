@@ -16,7 +16,7 @@ import {
   type YabEvent,
 } from "@/data/events";
 
-function normalizeSupabaseTime(value: unknown, fallback: string): string {
+function normalizeSupabaseTime(value: unknown, fallback?: string): string | undefined {
   if (typeof value === "string") {
     const trimmed = value.trim();
     if (!trimmed) return fallback;
@@ -25,7 +25,10 @@ function normalizeSupabaseTime(value: unknown, fallback: string): string {
     if (isoMatch) return isoMatch[1];
 
     const simpleMatch = trimmed.match(/^(\d{1,2}:\d{2})(?::\d{2})?/);
-    if (simpleMatch) return `${Number(simpleMatch[1].split(":")[0]).toString().padStart(2, "0")}:${simpleMatch[1].split(":")[1]}`;
+    if (simpleMatch) {
+      const simpleTime = simpleMatch[1]!;
+      return `${Number(simpleTime.split(":")[0]).toString().padStart(2, "0")}:${simpleTime.split(":")[1]}`;
+    }
 
     const parsed = new Date(trimmed);
     if (!Number.isNaN(parsed.getTime())) {
@@ -58,12 +61,11 @@ function normalizeSupabaseEvent(row: Record<string, unknown>): YabEvent | null {
 
   const start = normalizeSupabaseTime(
     row.start ?? row.start_time ?? row.startTime,
-    "09:00",
   );
   const end = normalizeSupabaseTime(
     row.end ?? row.end_time ?? row.endTime,
-    "10:00",
   );
+  const allDay = row.all_day === true || row.allDay === true;
 
   return {
     id: String(row.id ?? `${title || "event"}-${date || "new"}`),
@@ -76,6 +78,7 @@ function normalizeSupabaseEvent(row: Record<string, unknown>): YabEvent | null {
     description: typeof row.description === "string" ? row.description : "",
     roles,
     url: typeof row.url === "string" && row.url.trim() ? row.url.trim() : undefined,
+    allDay,
     featured: Boolean(row.featured),
   };
 }

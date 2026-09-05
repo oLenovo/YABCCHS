@@ -39,12 +39,18 @@ export function EventCard({
           <CalendarDays className="size-4 text-accent" />
           <dd>{formatEventDate(event.date)}</dd>
         </div>
-        <div className="flex items-center gap-2">
-          <Clock className="size-4 text-accent" />
-          <dd>
-            {formatTime(event.start)} – {formatTime(event.end)}
-          </dd>
-        </div>
+        {(event.allDay || event.start) && (
+          <div className="flex items-center gap-2">
+            <Clock className="size-4 text-accent" />
+            <dd>
+              {event.allDay
+                ? "All day"
+                : event.end
+                  ? `${formatTime(event.start!)} – ${formatTime(event.end)}`
+                  : `Starts ${formatTime(event.start!)}`}
+            </dd>
+          </div>
+        )}
         <div className="flex items-center gap-2">
           <MapPin className="size-4 text-accent" />
           <dd>{event.location}</dd>

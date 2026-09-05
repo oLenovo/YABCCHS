@@ -22,12 +22,13 @@ export type YabEvent = {
   title: string;
   category: EventCategory;
   date: string; // ISO date
-  start: string; // HH:MM 24h
-  end: string;
+  start?: string | undefined; // HH:MM 24h
+  end?: string | undefined;
   location: string;
   description: string;
   roles: string[];
-  url?: string;
+  url?: string | undefined;
+  allDay?: boolean;
   featured?: boolean;
 };
 
@@ -60,11 +61,26 @@ function toStamp(date: string, time: string) {
   return `${date.replace(/-/g, "")}T${time.replace(":", "")}00`;
 }
 
+function toDateStamp(date: string) {
+  return date.replace(/-/g, "");
+}
+
+function nextDateStamp(date: string) {
+  const nextDate = new Date(`${date}T12:00:00`);
+  nextDate.setDate(nextDate.getDate() + 1);
+  return nextDate.toISOString().slice(0, 10).replace(/-/g, "");
+}
+
 export function googleCalendarUrl(e: YabEvent) {
+  const hasTimedStart = Boolean(e.start);
+  const start = e.start ?? "00:00";
+  const end = e.end ?? start;
   const params = new URLSearchParams({
     action: "TEMPLATE",
     text: e.title,
-    dates: `${toStamp(e.date, e.start)}/${toStamp(e.date, e.end)}`,
+    dates: e.allDay || !hasTimedStart
+      ? `${toDateStamp(e.date)}/${nextDateStamp(e.date)}`
+      : `${toStamp(e.date, start)}/${toStamp(e.date, end)}`,
     details: e.description,
     location: e.location,
   });
@@ -72,14 +88,17 @@ export function googleCalendarUrl(e: YabEvent) {
 }
 
 export function icsDataUrl(e: YabEvent) {
+  const hasTimedStart = Boolean(e.start);
+  const start = e.start ?? "00:00";
+  const end = e.end ?? start;
   const ics = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
     "PRODID:-//Youth Advisory Board//EN",
     "BEGIN:VEVENT",
     `UID:${e.id}@youth-advisory-board`,
-    `DTSTART:${toStamp(e.date, e.start)}`,
-    `DTEND:${toStamp(e.date, e.end)}`,
+    e.allDay || !hasTimedStart ? `DTSTART;VALUE=DATE:${toDateStamp(e.date)}` : `DTSTART:${toStamp(e.date, start)}`,
+    e.allDay || !hasTimedStart ? `DTEND;VALUE=DATE:${nextDateStamp(e.date)}` : `DTEND:${toStamp(e.date, end)}`,
     `SUMMARY:${e.title}`,
     `DESCRIPTION:${e.description}`,
     `LOCATION:${e.location}`,
