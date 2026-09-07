@@ -130,7 +130,7 @@ function Index() {
 
       try {
         const { data, error } = await supabase
-          .from("events")
+          .from("upcoming_events")
           .select("*")
           .order("date", { ascending: true, nullsFirst: false });
 
