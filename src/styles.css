@@ -88,6 +88,12 @@
   --sidebar-border: oklch(0.9 0.03 250);
   --sidebar-ring: oklch(0.78 0.1 245);
 
+  /* calendar "this day has events" backlight */
+  --day-event-bg: oklch(0.9 0.1 85);
+  --day-event-foreground: oklch(0.34 0.06 60);
+  --day-event-glow: oklch(0.82 0.15 82 / 0.55);
+  --day-event-dot: oklch(0.6 0.16 25);
+
   --gradient-hero: linear-gradient(140deg, oklch(0.86 0.07 250), oklch(0.9 0.06 235) 45%, oklch(0.93 0.07 90));
   --gradient-warm: linear-gradient(120deg, var(--sunny), var(--coral));
   --gradient-sky: linear-gradient(160deg, oklch(0.93 0.05 250), oklch(0.97 0.03 90));
@@ -118,6 +124,11 @@
   --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 16%);
   --ring: oklch(0.7 0.13 190);
+
+  --day-event-bg: oklch(0.47 0.09 80);
+  --day-event-foreground: oklch(0.97 0.015 85);
+  --day-event-glow: oklch(0.86 0.15 85 / 0.4);
+  --day-event-dot: oklch(0.82 0.14 25);
 }
 
 @layer base {
@@ -154,4 +165,59 @@
 
 @utility shadow-lift {
   box-shadow: var(--shadow-lift);
+}
+
+/* ---------------------------------------------------------------------------
+   Calendar: backlight days that have events.
+
+   Deliberately unlayered so it beats the Tailwind utilities on the day cell
+   (e.g. the `today` cell's `bg-accent`). react-day-picker puts the modifier
+   class on the day cell, and the day button inside it is transparent, so the
+   cell background reads as a glow behind the date number.
+--------------------------------------------------------------------------- */
+.day-has-event {
+  border-radius: var(--radius-md);
+  background-color: var(--day-event-bg);
+  color: var(--day-event-foreground);
+  box-shadow:
+    0 0 0 1px var(--day-event-glow),
+    0 0 12px 2px var(--day-event-glow);
+}
+
+.day-has-event::after {
+  content: "";
+  position: absolute;
+  bottom: 0.2rem;
+  left: 50%;
+  width: 0.3rem;
+  height: 0.3rem;
+  transform: translateX(-50%);
+  border-radius: 9999px;
+  background-color: var(--day-event-dot);
+  pointer-events: none;
+}
+
+/* The selected day keeps its solid primary fill; only the halo + dot remain. */
+.day-has-event[data-selected="true"]::after {
+  background-color: var(--primary-foreground);
+}
+
+.day-has-event.rdp-outside {
+  opacity: 0.45;
+}
+
+/* Legend swatch under the calendar. */
+.day-has-event-swatch {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--day-event-bg);
+  box-shadow: 0 0 0 1px var(--day-event-glow), 0 0 8px 1px var(--day-event-glow);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .day-has-event {
+    transition: box-shadow 220ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
 }

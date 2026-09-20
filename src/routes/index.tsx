@@ -198,6 +198,16 @@ function Index() {
 
   const eventDates = useMemo(() => new Set(visible.map((event) => event.date)), [visible]);
 
+  // Days that actually have at least one (currently visible) event, so the
+  // calendar can backlight them.
+  const eventDays = useMemo(
+    () =>
+      Array.from(eventDates)
+        .map((dateKey) => new Date(`${dateKey}T12:00:00`))
+        .filter((date) => !Number.isNaN(date.getTime())),
+    [eventDates],
+  );
+
   const selectedDayEvents = useMemo(() => {
     if (!selectedDate) return [];
     const selectedKey = formatDateKey(selectedDate);
@@ -319,33 +329,14 @@ function Index() {
                   month={month}
                   onMonthChange={setMonth}
                   className="mx-auto w-full max-w-[620px]"
-                  components={{
-                    DayContent: ({ date }) => {
-                      const isoDay = formatDateKey(date);
-                      const hasEvent = eventDates.has(isoDay);
-                      const isSelected = selectedDate && formatDateKey(selectedDate) === isoDay;
-                      const isToday = formatDateKey(new Date()) === isoDay;
-
-                      const backgroundClass = isSelected
-                        ? "bg-[#7a4b39] text-white"
-                        : isToday
-                          ? "bg-[#1e90ff] text-white"
-                          : hasEvent
-                            ? "bg-[#f7c89f] text-[#3b2a22]"
-                            : "bg-transparent text-foreground";
-
-                      return (
-                        <div className="flex h-full w-full items-center justify-center">
-                          <span
-                            className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium transition-colors ${backgroundClass}`}
-                          >
-                            {date.getDate()}
-                          </span>
-                        </div>
-                      );
-                    },
-                  }}
+                  modifiers={{ hasEvent: eventDays }}
+                  modifiersClassNames={{ hasEvent: "day-has-event" }}
                 />
+
+                <p className="mt-2 flex items-center justify-center gap-2 text-xs text-muted-foreground">
+                  <span aria-hidden="true" className="day-has-event-swatch" />
+                  Glowing days have events — tap one to see what&apos;s on.
+                </p>
               </div>
 
               <div className="rounded-2xl border border-border bg-card p-5 shadow-card">
